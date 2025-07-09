@@ -1,10 +1,3 @@
-// Función para mapear un producto desde los parámetros
-function MapearProductosObject(nombreParam, precioParam) {
-  return {
-    nombre: nombreParam,
-    precio: precioParam
-  };
-}
 
 // Obtener todos los productos desde localStorage
 function obtenerTodosLosProductos() {
@@ -54,25 +47,29 @@ function actualizarProducto(id, nombre, precio) {
     };
     guardarProductos(productos);
     console.log("Producto actualizado:", id);
+    return true;
   }
+  return false;
 }
 
-// Eliminar un producto por ID
 function eliminarProducto(id) {
   let productos = obtenerTodosLosProductos();
+  const inicialLength = productos.length;
   productos = productos.filter(p => p.id !== id);
   guardarProductos(productos);
-  console.log("Producto eliminado:", id);
+  const eliminado = productos.length < inicialLength;
+  if (eliminado) console.log("Producto eliminado:", id);
+  return eliminado;
 }
 
 // Eliminar todos los productos
 function limpiarProductos() {
   localStorage.removeItem("productos");
   console.log("Todos los productos han sido eliminados.");
+  return true;
 }
 
 export {
-  MapearProductosObject,
   obtenerTodosLosProductos,
   guardarProductos,
   agregarProducto,
