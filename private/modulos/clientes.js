@@ -1,6 +1,3 @@
-
-
-// Función para mapear un cliente desde los parámetros
 function MapearClienteObject(id, nombreParam, cedulaParam, direccionParam) {
   return {
     id: id,
@@ -55,14 +52,22 @@ function actualizarCliente(id, nombre, cedula, direccion) {
   if (index !== -1) {
     clientes[index] = MapearClienteObject(id, nombre, cedula, direccion);
     guardarClientesEnLocalStorage(clientes);
+    console.log("Cliente actualizado:", id);
+    return true;
   }
+  return false;
 }
 
 // Eliminar cliente por ID
 function eliminarCliente(id) {
   let clientes = obtenerTodosLosClientes();
+  const clienteExiste = clientes.some(c => c.id === id);
+  if (!clienteExiste) return false;
+
   clientes = clientes.filter(c => c.id !== id);
   guardarClientesEnLocalStorage(clientes);
+  console.log("Cliente eliminado:", id);
+  return true;
 }
 
 // Eliminar todos los clientes (limpiar storage)
@@ -73,7 +78,7 @@ function limpiarClientes() {
 
 
 export {
-  MapearClienteObject,
+  
   obtenerTodosLosClientes,
   obtenerClientePorId,
   guardarClientesEnLocalStorage,
