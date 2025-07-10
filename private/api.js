@@ -17,8 +17,15 @@ import {
   actualizarCliente,
   eliminarCliente,
   limpiarClientes
-} from "../private/modulos/clientes.js"; // ajusta la ruta según tu estructura real
+} from "../private/modulos/clientes.js"; 
 
+import {
+  obtenerTodasLasFacturas,
+  agregarFactura,
+  obtenerFacturaPorId,
+  eliminarFactura,
+  limpiarFacturas
+} from "../private/modulos/facturas.js"; 
 
 
 //Productos Services
@@ -80,7 +87,30 @@ function LimpiarClientesService() {
   limpiarClientes();
 }
 
+// Facturas Services
+function ObtenerTodasFacturasService() {
+  return obtenerTodasLasFacturas();
+}
 
+// Servicio para agregar una nueva factura
+function AgregarFacturaService(clienteId, productos) {
+  return agregarFactura(clienteId, productos);
+}
+
+// Servicio para obtener una factura por ID
+function ObtenerFacturaPorIdService(id) {
+  return obtenerFacturaPorId(id);
+}
+
+// Servicio para eliminar una factura por ID
+function EliminarFacturaService(id) {
+  return eliminarFactura(id);
+}
+
+// Servicio para limpiar todas las facturas
+function LimpiarFacturasService() {
+  return limpiarFacturas();
+}
 
 export{
     //Export Productos Services
@@ -99,7 +129,14 @@ export{
     AgregarClienteService,
     ActualizarClienteService,
     EliminarClienteService,
-    LimpiarClientesService
+    LimpiarClientesService,
+
+    //Export Facturas Services
+    ObtenerTodasFacturasService,
+    AgregarFacturaService,
+    ObtenerFacturaPorIdService,
+    EliminarFacturaService,
+    LimpiarFacturasService
 }
 
 

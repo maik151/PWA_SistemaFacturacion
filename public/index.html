@@ -4,35 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sistema de Facturación</title>
+  <link rel="manifest" href="./manifiest.json" />
+  <meta name="theme-color" content="#2563eb" />
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 <body>
-  <div class="contenedor-principal">
+  <aside-bar-element></aside-bar-element>
+    <script type="module" src="../public/javascript/main.js"></script>
+    <script type="module" src="../public/javascript/components/productosComponent.js"></script>
+    <script type="module" src="../public/javascript/components/clientesComponent.js"></script>
+    <script type="module" src="../public/javascript/components/facturasComponent.js"></script>
+    <script type="module" src="../public/javascript/components/inicioComponent.js"></script>
+    <script type="module" src="../public/javascript/components/asideBarComponent.js"></script>
     
-    <!-- Menú lateral -->
-    <aside class="contenedor-aside">
-      <h2 class="titulo-menu">Menú</h2>
-      <nav class="menu-navegacion">
-        <ul>
-          <li><a href="#" data-seccion="clientes">Clientes</a></li>
-          <li><a href="#" data-seccion="productos">Productos</a></li>
-          <li><a href="#" data-seccion="facturacion">Facturación</a></li>
-        </ul>
-      </nav>
-    </aside>
-
-    <!-- Panel dinámico (contenido que aparece al lado del menú) -->
-    <div class="contenedor-panel-dinamico">
-        <div id="panel-dinamico" class="panel-dinamico">
-        <p>Selecciona una opción del menú :3.</p>
-        </div>
-    </div>
-
-  </div>
-
-  <!-- Scripts -->
-  <script type="module" src="./javascript/navegacion.js"></script>
-  <script type="module" src="./javascript/main/clientesMain.js"></script>
-    <script type="module" src="./javascript/main/productosMain.js"></script>  
 </body>
 </html>
