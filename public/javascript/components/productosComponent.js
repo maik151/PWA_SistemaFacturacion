@@ -20,56 +20,62 @@ class ProductoElement extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
-    <style>
-      @import "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
-      :host { display: block; font-family: sans-serif; }
-    </style>
+      <link href="./styles/css/bootstrap.min.css" rel="stylesheet">
+      <script src="./styles/js/bootstrap.bundle.min.js"></script>
 
-    <div class="p-6 bg-white/70 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl max-w-3xl mx-auto animate-fade-in">
-      <h2 class="text-3xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">
-        Gestión de Productos
-      </h2>
+      <style>
+        :host { display: block; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+        dialog::backdrop {
+          background-color: rgba(0,0,0,0.5);
+        }
+        dialog {
+          border: none;
+          border-radius: 0.5rem;
+          max-width: 400px;
+          padding: 1.5rem;
+        }
+      </style>
 
-      <form id="formProducto" class="space-y-4 mb-8">
-        <input type="text" id="nombreProducto" placeholder="Nombre del producto"
-          required class="border border-gray-300 px-4 py-2 w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200" />
-        <input type="number" step="0.01" id="precioProducto" placeholder="Precio"
-          required class="border border-gray-300 px-4 py-2 w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200" />
-        <button type="submit"
-          class="bg-indigo-600 text-white px-6 py-2 rounded-xl hover:bg-indigo-700 transition duration-300 shadow-md">
-          Guardar Producto
-        </button>
-      </form>
+      <div class="container py-4">
+        <h2 class="mb-4 text-center text-primary fw-bold">Gestión de Productos</h2>
 
-      <h3 class="text-2xl font-semibold mb-4">Listado de Productos</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full border border-gray-300 text-left rounded-xl overflow-hidden shadow-md">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="p-3 border">Nombre</th>
-              <th class="p-3 border">Precio</th>
-              <th class="p-3 border text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tbodyProductos" class="bg-white"></tbody>
-        </table>
-      </div>
-    </div>
+        <form id="formProducto" class="mb-4">
+          <div class="mb-3">
+            <input type="text" id="nombreProducto" placeholder="Nombre del producto" required class="form-control" />
+          </div>
+          <div class="mb-3">
+            <input type="number" step="0.01" id="precioProducto" placeholder="Precio" required class="form-control" />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Guardar Producto</button>
+        </form>
 
-    <!-- Modal de edición -->
-    <dialog id="modalEditar" class="rounded-xl backdrop:bg-black/50 p-0 shadow-2xl">
-      <form method="dialog" class="bg-white rounded-xl p-6 w-96 space-y-4 animate-fade-in">
-        <h4 class="text-xl font-bold text-gray-800">Editar Producto</h4>
-        <input type="text" id="editarNombre" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        <input type="number" step="0.01" id="editarPrecio" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        <div class="flex justify-end space-x-2 pt-2">
-          <button type="button" id="btnCancelarEdicion"
-            class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 text-gray-800 transition">Cancelar</button>
-          <button type="submit" id="btnGuardarEdicion"
-            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">Guardar</button>
+        <h3 class="mb-3">Listado de Productos</h3>
+        <div class="table-responsive rounded shadow-sm border">
+          <table class="table table-striped table-bordered mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th class="text-center" style="width: 140px;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyProductos"></tbody>
+          </table>
         </div>
-      </form>
-    </dialog>
+      </div>
+
+      <!-- Modal edición Bootstrap nativo -->
+      <dialog id="modalEditar">
+        <form method="dialog" class="d-flex flex-column gap-3">
+          <h4 class="fw-bold mb-3 text-center">Editar Producto</h4>
+          <input type="text" id="editarNombre" class="form-control" />
+          <input type="number" step="0.01" id="editarPrecio" class="form-control" />
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" id="btnCancelarEdicion" class="btn btn-secondary">Cancelar</button>
+            <button type="submit" id="btnGuardarEdicion" class="btn btn-success">Guardar</button>
+          </div>
+        </form>
+      </dialog>
     `;
   }
 
@@ -112,11 +118,11 @@ class ProductoElement extends HTMLElement {
 
     tbody.innerHTML = productos.map(p => `
       <tr>
-        <td class="border p-2">${p.nombre}</td>
-        <td class="border p-2">$${p.precio.toFixed(2)}</td>
-        <td class="border p-2 flex gap-2 justify-center">
-          <button data-id="${p.id}" class="btnEditar bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Editar</button>
-          <button data-id="${p.id}" class="btnEliminar bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Eliminar</button>
+        <td>${p.nombre}</td>
+        <td>$${p.precio.toFixed(2)}</td>
+        <td class="text-center">
+          <button data-id="${p.id}" class="btn btn-sm btn-warning me-2 btnEditar">Editar</button>
+          <button data-id="${p.id}" class="btn btn-sm btn-danger btnEliminar">Eliminar</button>
         </td>
       </tr>
     `).join("");

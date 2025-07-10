@@ -3,8 +3,7 @@ import {
   ObtenerClientePorIdService,
   AgregarClienteService,
   ActualizarClienteService,
-  EliminarClienteService,
-  LimpiarClientesService
+  EliminarClienteService
 } from "../../../private/api.js";
 
 class ClienteElement extends HTMLElement {
@@ -22,59 +21,95 @@ class ClienteElement extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
+      <link href="./styles/css/bootstrap.min.css" rel="stylesheet">
+      <script src="./styles/js/bootstrap.bundle.min.js"></script>
+
       <style>
-        @import "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
         :host {
           display: block;
           font-family: sans-serif;
+          background: #f8f9fa;
+          padding: 2rem;
+        }
+
+        .card {
+          max-width: 700px;
+          margin: 0 auto;
+          border-radius: 1rem;
+          box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
+        }
+
+        dialog::backdrop {
+          background: rgba(0,0,0,0.5);
+        }
+
+        #modalEditar:not([open]) {
+          display: none;
         }
       </style>
 
-      <div class="p-6 bg-white/70 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl max-w-4xl mx-auto animate-fade-in">
-        <h2 class="text-3xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-500">
-          Gestión de Clientes
-        </h2>
+      <div class="card p-4 bg-white">
+        <h2 class="mb-4 text-primary text-center fw-bold">Gestión de Clientes</h2>
 
-        <form id="formCliente" class="space-y-4 mb-6">
-          <input type="text" id="nombreCliente" placeholder="Nombre"
-            required class="border border-gray-300 px-4 py-2 w-full rounded-lg focus:ring-2 focus:ring-green-400" />
-          <input type="text" id="cedulaCliente" placeholder="Cédula"
-            required class="border border-gray-300 px-4 py-2 w-full rounded-lg focus:ring-2 focus:ring-green-400" />
-          <input type="text" id="direccionCliente" placeholder="Dirección"
-            required class="border border-gray-300 px-4 py-2 w-full rounded-lg focus:ring-2 focus:ring-green-400" />
-          <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
-            Guardar Cliente
-          </button>
+        <form id="formCliente" class="mb-4">
+          <div class="mb-3">
+            <input type="text" id="nombreCliente" placeholder="Nombre" required class="form-control" />
+          </div>
+          <div class="mb-3">
+            <input type="text" id="cedulaCliente" placeholder="Cédula" required class="form-control" />
+          </div>
+          <div class="mb-3">
+            <input type="text" id="direccionCliente" placeholder="Dirección" required class="form-control" />
+          </div>
+          <button type="submit" class="btn btn-success w-100">Guardar Cliente</button>
         </form>
 
-        <h3 class="text-2xl font-semibold mb-4">Listado de Clientes</h3>
-        <table class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md">
-          <thead class="bg-gray-100">
-            <tr><th class="p-2 border">Nombre</th><th class="p-2 border">Cédula</th><th class="p-2 border">Dirección</th><th class="p-2 border text-center">Acciones</th></tr>
-          </thead>
-          <tbody id="tbodyClientes" class="bg-white"></tbody>
-        </table>
+        <h3 class="mb-3">Listado de Clientes</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped rounded-3">
+            <thead class="table-light">
+              <tr>
+                <th>Nombre</th>
+                <th>Cédula</th>
+                <th>Dirección</th>
+                <th class="text-center" style="width: 130px;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyClientes"></tbody>
+          </table>
+        </div>
 
-        <!-- Modal -->
-        <dialog id="modalEditar" class="rounded-xl backdrop:bg-black/50 p-0 shadow-2xl">
-          <form method="dialog" class="bg-white rounded-xl p-6 w-96 space-y-4 animate-fade-in">
-            <h4 class="text-xl font-bold">Editar Cliente</h4>
-            <input type="text" id="editarNombre" class="w-full border px-3 py-2 rounded" placeholder="Nombre" />
-            <input type="text" id="editarCedula" class="w-full border px-3 py-2 rounded" placeholder="Cédula" />
-            <input type="text" id="editarDireccion" class="w-full border px-3 py-2 rounded" placeholder="Dirección" />
-            <div class="flex justify-end space-x-2">
-              <button type="button" id="btnCancelarEdicion" class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
-              <button type="submit" id="btnGuardarEdicion" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+        <!-- Modal para edición -->
+        <dialog id="modalEditar" class="rounded-3 p-0 border-0 shadow-lg">
+          <form method="dialog" class="p-4 bg-white rounded-3" style="width: 350px; max-width: 90vw;">
+            <h4 class="mb-3 fw-bold">Editar Cliente</h4>
+            <div class="mb-3">
+              <input type="text" id="editarNombre" class="form-control" placeholder="Nombre" />
+            </div>
+            <div class="mb-3">
+              <input type="text" id="editarCedula" class="form-control" placeholder="Cédula" />
+            </div>
+            <div class="mb-3">
+              <input type="text" id="editarDireccion" class="form-control" placeholder="Dirección" />
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" id="btnCancelarEdicion" class="btn btn-secondary">Cancelar</button>
+              <button type="submit" id="btnGuardarEdicion" class="btn btn-primary">Guardar</button>
             </div>
           </form>
         </dialog>
       </div>
     `;
+
+    // Cerrar modal si está abierto por defecto
+    this.shadowRoot.querySelector("#modalEditar").close();
   }
 
   setupEventListeners() {
     const form = this.shadowRoot.querySelector("#formCliente");
-    form.addEventListener("submit", e => {
+    const modal = this.shadowRoot.querySelector("#modalEditar");
+
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
       const nombre = this.shadowRoot.querySelector("#nombreCliente").value.trim();
       const cedula = this.shadowRoot.querySelector("#cedulaCliente").value.trim();
@@ -87,8 +122,13 @@ class ClienteElement extends HTMLElement {
       }
     });
 
+    // Cerrar modal al hacer clic fuera
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) modal.close();
+    });
+
     this.shadowRoot.querySelector("#btnCancelarEdicion").addEventListener("click", () => {
-      this.shadowRoot.querySelector("#modalEditar").close();
+      modal.close();
     });
 
     this.shadowRoot.querySelector("#btnGuardarEdicion").addEventListener("click", (e) => {
@@ -100,7 +140,7 @@ class ClienteElement extends HTMLElement {
 
       if (id && nombre && cedula && direccion) {
         ActualizarClienteService(id, { nombre, cedula, direccion });
-        this.shadowRoot.querySelector("#modalEditar").close();
+        modal.close();
         this.renderTabla();
       }
     });
@@ -112,16 +152,17 @@ class ClienteElement extends HTMLElement {
 
     tbody.innerHTML = clientes.map(c => `
       <tr>
-        <td class="border p-2">${c.nombre}</td>
-        <td class="border p-2">${c.cedula}</td>
-        <td class="border p-2">${c.direccion}</td>
-        <td class="border p-2 space-x-2 text-center">
-          <button data-id="${c.id}" class="btnEditar bg-yellow-400 text-white px-3 py-1 rounded">Editar</button>
-          <button data-id="${c.id}" class="btnEliminar bg-red-500 text-white px-3 py-1 rounded">Eliminar</button>
+        <td>${c.nombre}</td>
+        <td>${c.cedula}</td>
+        <td>${c.direccion}</td>
+        <td class="text-center">
+          <button data-id="${c.id}" class="btnEditar btn btn-warning btn-sm me-1">Editar</button>
+          <button data-id="${c.id}" class="btnEliminar btn btn-danger btn-sm">Eliminar</button>
         </td>
       </tr>
     `).join("");
 
+    // Botones eliminar
     this.shadowRoot.querySelectorAll(".btnEliminar").forEach(btn => {
       btn.addEventListener("click", () => {
         const id = parseInt(btn.getAttribute("data-id"));
@@ -130,6 +171,7 @@ class ClienteElement extends HTMLElement {
       });
     });
 
+    // Botones editar
     this.shadowRoot.querySelectorAll(".btnEditar").forEach(btn => {
       btn.addEventListener("click", () => {
         const id = parseInt(btn.getAttribute("data-id"));
@@ -143,21 +185,6 @@ class ClienteElement extends HTMLElement {
         }
       });
     });
-
-    this.shadowRoot.querySelector("#btnGuardarEdicion").addEventListener("click", (e) => {
-    e.preventDefault();
-    const id = this.clienteEditandoId;
-    const nombre = this.shadowRoot.querySelector("#editarNombre").value.trim();
-    const cedula = this.shadowRoot.querySelector("#editarCedula").value.trim();
-    const direccion = this.shadowRoot.querySelector("#editarDireccion").value.trim();
-
-    if (id && nombre && cedula && direccion) {
-        ActualizarClienteService(id, { nombre, cedula, direccion });
-        this.shadowRoot.querySelector("#modalEditar").close();
-        this.renderTabla();
-    }
-    });
-
   }
 }
 

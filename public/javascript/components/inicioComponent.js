@@ -10,14 +10,14 @@ class InicioElement extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
       <style>
-        @import "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
         :host {
           display: block;
-          font-family: 'Inter', sans-serif;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
           padding: 2rem;
           text-align: center;
-          color: #2563eb;
+          color: #0d6efd; /* color primary bootstrap */
         }
         h1 {
           font-size: 2.5rem;
@@ -26,11 +26,17 @@ class InicioElement extends HTMLElement {
         }
         p {
           font-size: 1.25rem;
-          color: #374151;
+          color: #495057; /* texto secundario bootstrap */
         }
       </style>
-      <h1>Bienvenido a Mi Proyecto</h1>
-      <p>Este es el panel de inicio. Aquí puedes gestionar clientes, productos y facturas.</p>
+
+      <div class="container">
+        <h1>Bienvenido a Mi Proyecto</h1>
+        <p>Nombre: Michael Steven Jimenez Basante</p>
+        <p>Programacion de Componentes Web</p>
+        
+        <p>Este es el panel de inicio. Aquí puedes gestionar clientes, productos y facturas.</p>
+      </div>
     `;
   }
 }

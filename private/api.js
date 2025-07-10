@@ -93,8 +93,8 @@ function ObtenerTodasFacturasService() {
 }
 
 // Servicio para agregar una nueva factura
-function AgregarFacturaService(clienteId, productos) {
-  return agregarFactura(clienteId, productos);
+function AgregarFacturaService(clienteId, productos, clienteNombre) {
+  return agregarFactura(clienteId, productos, clienteNombre);
 }
 
 // Servicio para obtener una factura por ID

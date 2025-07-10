@@ -9,38 +9,45 @@ function guardarFacturas(facturas) {
 }
 
 // Crear una nueva factura
-function agregarFactura(clienteId, productos) {
+function agregarFactura(clienteId, productos, clienteNombre) {
   let facturas = obtenerTodasLasFacturas();
 
-  // Calcular ID nuevo
+  // Calcular nuevo ID
   let maxId = facturas.reduce((max, f) => Math.max(max, f.id), 0);
   let nuevoId = maxId + 1;
 
-  // Calcular subtotal por producto y total general
-  let total = 0;
+  let subtotal = 0;
   const productosProcesados = productos.map(p => {
-    const subtotal = p.cantidad * p.precio;
-    total += subtotal;
+    const subtotalProducto = p.cantidad * p.precio;
+    subtotal += subtotalProducto;
     return {
       idProducto: p.idProducto,
       cantidad: p.cantidad,
-      subtotal: subtotal
+      precio: p.precio,
+      subtotal: subtotalProducto
     };
   });
 
+  const iva = subtotal * 0.12;
+  const total = subtotal + iva;
+
   const nuevaFactura = {
     id: nuevoId,
-    clienteId: clienteId,
+    clienteId,
+    clienteNombre,      // Guardamos el nombre aquí
+    fecha: new Date().toISOString().split("T")[0], // YYYY-MM-DD
     productos: productosProcesados,
-    total: total,
-    fecha: new Date().toISOString().split("T")[0] // YYYY-MM-DD
+    subtotal,
+    iva,
+    total
   };
 
   facturas.push(nuevaFactura);
-  guardarFacturas(facturas);
-  console.log("Factura creada con ID:", nuevoId);
+  localStorage.setItem("facturas", JSON.stringify(facturas));
+
   return nuevaFactura;
 }
+
 
 // Obtener una factura por ID
 function obtenerFacturaPorId(id) {
