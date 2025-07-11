@@ -21,9 +21,7 @@ class ClienteElement extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
-      <link href="./styles/css/bootstrap.min.css" rel="stylesheet">
-      <script src="./styles/js/bootstrap.bundle.min.js"></script>
-
+      <link href="/public/styles/css/bootstrap.min.css" rel="stylesheet">
       <style>
         :host {
           display: block;

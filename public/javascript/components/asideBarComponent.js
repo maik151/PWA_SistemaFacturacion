@@ -14,7 +14,7 @@ class AsideBarElement extends HTMLElement {
   render() {
     this.shadowRoot.innerHTML = `
       
-      <link href="./styles/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/public/styles/css/bootstrap.min.css" rel="stylesheet">
 
       <style>
         :host {
@@ -167,9 +167,6 @@ class AsideBarElement extends HTMLElement {
       <main id="mainContent">
         <!-- Aquí se cargan los componentes dinámicamente -->
       </main>
-
-      <!-- Bootstrap JS Bundle (con Popper) -->
-      <script src="../styles/js/bootstrap.bundle.min.js"></script>
 
     `;
   }

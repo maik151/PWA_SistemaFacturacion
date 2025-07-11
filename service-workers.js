@@ -1,23 +1,40 @@
-const CACHE_NAME = "admin-app-cache-v1";
+
+const CACHE_NAME = "admin-app-cache-v2";
 const ASSETS_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./styles.css",
-  "../public/javascript/main.js",
-  "../public/javascript/components/asideBarComponent.js",
-  "../public/javascript/components/clientesComponent.js",
-  "../public/javascript/components/facturasComponent.js",
-  "../public/javascript/components/inicioComponent.js",
-  "../public/javascript/components/productosComponent.js",
-  // Añade aquí las rutas de tus assets estáticos, css, js, imágenes, fuentes, etc.
+  './',
+  './index.html',
+  './manifest.json',
+  "./public/styles/css/bootstrap.min.css",
+  "./public/styles/js/bootstrap.min.js",
+  "./public/javascript/components/asideBarComponent.js",
+  "./public/styles/css/clientesComponent.css",
+  "./public/styles/css/facturasComponent.css",
+  "./public/styles/css/productosComponent.css",
+  "./public/icons/1x/icon1.png",
+  "./public/icons/1x/icon2.png",
+  "./private/api.js",
+  "./private/modulos/clientes.js",
+  "./private/modulos/clientes.js",
+  "./private/modulos/clientes.js",
+  "./private/modulos/facturas.js",
+  "./private/modulos/productos.js"
 ];
 
 // Instalación y caché de archivos estáticos
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(ASSETS_TO_CACHE);
+    caches.open(CACHE_NAME).then(async cache => {
+      const cachePromises = ASSETS_TO_CACHE.map(async (url) => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`${url} devolvió ${response.status}`);
+          await cache.put(url, response.clone());
+        } catch (err) {
+          console.warn("No se pudo cachear:", url, err.message);
+        }
+      });
+
+      return Promise.all(cachePromises);
     })
   );
   self.skipWaiting();
@@ -25,15 +42,18 @@ self.addEventListener("install", event => {
 
 // Activación y limpieza de caches viejos
 self.addEventListener("activate", event => {
+  const whiteList = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+        keys.map(key => {
+          if (!whiteList.includes(key)) {
+            return caches.delete(key);
+          }
+        })
       )
     )
   );
-  self.clients.claim();
 });
 
 // Interceptar requests y responder con cache o fetch

@@ -46,8 +46,8 @@ function ObtenerProductoPorIdService(id) {
 }
 
 
-function ActualizarProductoService(id, nombre, precio) {
-    return actualizarProducto(id, nombre, precio);
+function ActualizarProductoService(id, productoData) {
+    return actualizarProducto(id, productoData.nombre, productoData.precio);
 }
 
 function EliminarProductoService(id) {
